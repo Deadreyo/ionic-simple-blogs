@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { addDoc, arrayUnion, collection, deleteDoc, doc, getDocs, getFirestore, increment, onSnapshot, updateDoc } from "firebase/firestore";
 import { Blog } from "./types/Blog";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const firebaseConfig = {
     apiKey: import.meta.env.VITE_API_KEY,
@@ -84,14 +84,20 @@ export const useBlogs = () => {
 
     const resetLikes = () => setNewLikes(0);
 
+    const blogsRef = useRef<Blog[]>([]);
+
+    useEffect(() => {
+        blogsRef.current = blogs;
+    }, [blogs]);
+
     useEffect(() => {
         const unsub = onSnapshot(collection(db, "blogs"), (doc) => {
             doc.docChanges().forEach((change) => {
                 if (change.type === "modified") {
-                    if(!blogs.find((blog) => blog.id === change.doc.id)) return;
-
-                    const oldLikes = blogs.find((blog) => blog.id === change.doc.id)!.likes;
-                    if(change.doc.data().likes > oldLikes!) {
+                    const oldBlog = blogsRef.current.find((blog) => blog.id === change.doc.id);
+                    const newBlog = change.doc.data() as Blog;
+                    
+                    if(newBlog.likes > oldBlog?.likes!) {
                         setNewLikes(likes => likes + 1);
                     }
                 }

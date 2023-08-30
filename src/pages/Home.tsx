@@ -12,12 +12,12 @@ import { useBlogs } from '../firestore';
 
 const Home: React.FC = () => {
 
-  const { blogs } = useBlogs();
+  const { blogs, newLikes, resetLikes } = useBlogs();
 
   return (
     <IonPage id="home-page">
       
-      <AppHeader />
+      <AppHeader newLikes={newLikes} resetLikes={resetLikes} />
 
       <IonContent fullscreen color="light">
         <AddBlog />

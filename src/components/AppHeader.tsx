@@ -3,9 +3,7 @@ import { notifications } from "ionicons/icons";
 import './AppHeader.css'
 import { useBlogs } from "../firestore";
 
-export default function AppHeader() {
-
-    const {newLikes, resetLikes} = useBlogs();
+export default function AppHeader({ newLikes, resetLikes }: { newLikes: number, resetLikes: () => void}) {
 
     return (
         <IonHeader>
