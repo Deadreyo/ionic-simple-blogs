@@ -1,0 +1,15 @@
+.divider-below {
+    border-bottom: 1px solid #dedede;
+}
+
+.addCommentDiv {
+    padding: 20px;
+}
+
+.addCommentDiv ion-row {
+    flex-wrap: nowrap;
+}
+
+.margin-right {
+    margin-right: 10px;
+}

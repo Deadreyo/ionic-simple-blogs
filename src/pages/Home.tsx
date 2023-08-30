@@ -2,17 +2,29 @@ import MessageListItem from '../components/MessageListItem';
 import { useState } from 'react';
 import { Message, getMessages } from '../data/messages';
 import {
+  IonBadge,
+  IonCard,
   IonContent,
   IonHeader,
+  IonIcon,
+  IonInput,
+  IonLabel,
   IonList,
+  IonListHeader,
   IonPage,
   IonRefresher,
   IonRefresherContent,
+  IonTextarea,
   IonTitle,
   IonToolbar,
   useIonViewWillEnter
 } from '@ionic/react';
 import './Home.css';
+import AddBlog from '../components/AddBlog';
+import BlogListItem from '../components/BlogListItem';
+import { blogs } from '../data/blogs';
+import { notifications } from 'ionicons/icons';
+import AppHeader from '../components/AppHeader';
 
 const Home: React.FC = () => {
 
@@ -29,29 +41,25 @@ const Home: React.FC = () => {
     }, 3000);
   };
 
+  const data = blogs;
+
   return (
     <IonPage id="home-page">
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Inbox</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent fullscreen>
-        <IonRefresher slot="fixed" onIonRefresh={refresh}>
-          <IonRefresherContent></IonRefresherContent>
-        </IonRefresher>
+      
+      <AppHeader />
 
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">
-              Inbox
-            </IonTitle>
-          </IonToolbar>
-        </IonHeader>
+      <IonContent fullscreen color="light">
+        <AddBlog />
 
-        <IonList>
-          {messages.map(m => <MessageListItem key={m.id} message={m} />)}
-        </IonList>
+        <IonCard>
+          <IonList>
+            <IonListHeader>
+              <h2>Blogs</h2>
+            </IonListHeader>
+            {data.map((blog, index) => <BlogListItem key={index} {...blog} />)}
+          </IonList>
+        </IonCard>
+
       </IonContent>
     </IonPage>
   );
