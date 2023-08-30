@@ -4,5 +4,10 @@ export interface Blog {
     title: string;
     content: string;
     likes: number;
-    comments: string[];
+    comments: Comment[];
+}
+
+export interface Comment {
+    content: string;
+    likes: number;
 }

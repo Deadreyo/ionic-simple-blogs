@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
-import { addDoc, arrayUnion, collection, deleteDoc, doc, getDocs, getFirestore, increment, onSnapshot, updateDoc } from "firebase/firestore";
-import { Blog } from "./types/Blog";
+import { addDoc, arrayRemove, arrayUnion, collection, deleteDoc, doc, getDocs, getFirestore, increment, onSnapshot, updateDoc } from "firebase/firestore";
+import { Blog, Comment } from "./types/Blog";
 import { useEffect, useRef, useState } from "react";
 
 const firebaseConfig = {
@@ -67,14 +67,52 @@ export async function deleteBlog(id: string) {
     }
 }
 
-export async function addComment(id: string, comment: string) {
-    const blogRef = doc(db, "blogs", id);
+export async function addComment(blogId: string, comment: string) {
+    const blogRef = doc(db, "blogs", blogId);
+
+    let newComment: Comment = {
+        content: comment,
+        likes: 0,
+    }
+    
     try {
         await updateDoc(blogRef, {
-            comments: arrayUnion(comment)
+            comments: arrayUnion(newComment)
         });
     } catch (e) {
-        console.error("Error updating document: ", e);
+        console.error("Error adding comment: ", e);
+    }
+}
+
+export async function deleteComment(blogId: string, comment: Comment) {
+    const blogRef = doc(db, "blogs", blogId);
+    
+    try {
+        await updateDoc(blogRef, {
+            comments: arrayRemove(comment)
+        });
+    } catch (e) {
+        console.error("Error removing comment: ", e);
+    }
+}
+
+export async function likeComment(blogId: string, index: number) {
+    const blogRef = doc(db, "blogs", blogId);
+
+    const blogs = await getAllBlogs();
+    const comments = blogs.find(blog => blog.id === blogId)!.comments;
+    
+    try {
+        await updateDoc(blogRef, {
+            comments: comments.map((comment, i) => {
+                if(i === index) {
+                    comment.likes++;
+                }
+                return comment;
+            })
+        });
+    } catch (e) {
+        console.error("Error removing comment: ", e);
     }
 }
 

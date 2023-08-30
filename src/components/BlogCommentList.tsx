@@ -1,16 +1,16 @@
 import { IonItemDivider, IonList, IonItem, IonIcon } from "@ionic/react";
 import { chatbubbleEllipsesOutline } from "ionicons/icons";
+import { Comment } from "../types/Blog";
+import BlogCommentItem from "./BlogCommentItem";
 
-export default function BlogCommentList({ comments }: { comments: string[] }) {
+export default function BlogCommentList({ comments, blogId }: { comments: Comment[], blogId: string }) {
     return (
         <IonItemDivider>
-            <IonList>
+            <IonList style={{width: "100%"}}>
                 <h4>Comments</h4>
                 {
                     comments.map((comment, index) => (
-                        <IonItem lines="none" key={index}>
-                            <IonIcon icon={chatbubbleEllipsesOutline} className="margin-right"/>{comment}
-                        </IonItem>
+                        <BlogCommentItem comment={comment} blogId={blogId} index={index} key={crypto.randomUUID()} />
                     ))
                 }
             </IonList>

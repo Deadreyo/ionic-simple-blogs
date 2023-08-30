@@ -25,7 +25,7 @@ export default function BlogListItem({ title, content, comments, id, likes }: Bl
 
             <BlogControlsBar likes={likes} id={id} />
 
-            <BlogCommentList comments={comments} />
+            <BlogCommentList comments={comments} blogId={id} />
 
             <div className="addCommentDiv">
                 <IonRow>
