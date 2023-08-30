@@ -1,47 +1,18 @@
-import MessageListItem from '../components/MessageListItem';
-import { useState } from 'react';
-import { Message, getMessages } from '../data/messages';
+import { useEffect, useState } from 'react';
 import {
-  IonBadge,
   IonCard,
   IonContent,
-  IonHeader,
-  IonIcon,
-  IonInput,
-  IonLabel,
   IonList,
   IonListHeader,
-  IonPage,
-  IonRefresher,
-  IonRefresherContent,
-  IonTextarea,
-  IonTitle,
-  IonToolbar,
-  useIonViewWillEnter
-} from '@ionic/react';
-import './Home.css';
+  IonPage} from '@ionic/react';
 import AddBlog from '../components/AddBlog';
 import BlogListItem from '../components/BlogListItem';
-import { blogs } from '../data/blogs';
-import { notifications } from 'ionicons/icons';
 import AppHeader from '../components/AppHeader';
+import { useBlogs } from '../firestore';
 
 const Home: React.FC = () => {
 
-  const [messages, setMessages] = useState<Message[]>([]);
-
-  useIonViewWillEnter(() => {
-    const msgs = getMessages();
-    setMessages(msgs);
-  });
-
-  const refresh = (e: CustomEvent) => {
-    setTimeout(() => {
-      e.detail.complete();
-    }, 3000);
-  };
-
-  const data = blogs;
+  const { blogs } = useBlogs();
 
   return (
     <IonPage id="home-page">
@@ -56,7 +27,7 @@ const Home: React.FC = () => {
             <IonListHeader>
               <h2>Blogs</h2>
             </IonListHeader>
-            {data.map((blog, index) => <BlogListItem key={index} {...blog} />)}
+            {blogs.map((blog, index) => <BlogListItem key={index} {...blog} />)}
           </IonList>
         </IonCard>
 

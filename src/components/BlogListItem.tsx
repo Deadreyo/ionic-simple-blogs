@@ -2,10 +2,19 @@ import { IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, 
 import { chatbubble, chatbubbleEllipsesOutline, chatbubbleOutline, thumbsUpOutline, thumbsUpSharp, trashBin } from "ionicons/icons";
 import './BlogListItem.css'
 import BlogCommentList from "./BlogCommentList";
-import BlogControlsBar from "./BlogLikesBar";
-import { Blog } from "../data/blogs";
+import BlogControlsBar from "./BlogControlsBar";
+import { Blog } from "../types/Blog";
+import { useState } from "react";
+import { addComment } from "../firestore";
 
 export default function BlogListItem({ title, content, comments, id, likes }: Blog) {
+
+    const [comment, setComment] = useState<string>('');
+
+    function handleAddComment() {
+        addComment(id, comment);
+    }
+
     return(
         <IonCard>
             <IonCardHeader>
@@ -14,14 +23,15 @@ export default function BlogListItem({ title, content, comments, id, likes }: Bl
         
             <IonCardContent>{content}</IonCardContent>
 
-            <BlogControlsBar likes={likes} />
+            <BlogControlsBar likes={likes} id={id} />
 
             <BlogCommentList comments={comments} />
 
             <div className="addCommentDiv">
                 <IonRow>
-                    <IonTextarea placeholder='Enter text' label="Add Comment" labelPlacement="stacked" fill="outline" />
-                    <IonButton fill="clear">Add</IonButton>
+                    <IonTextarea placeholder='Enter text' label="Add Comment" labelPlacement="stacked" fill="outline"
+                        value={comment} onIonChange={e => setComment(e.target.value ?? "")}  />
+                    <IonButton fill="clear" onClick={handleAddComment}>Add</IonButton>
                 </IonRow>
             </div>
            
